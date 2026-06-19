@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="Cache-Control" content="no-cache" />
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <title>p4kvm</title>
+  </head>
+  <body>
+    <header class="top-bar">
+      <h1 class="top-title">p4kvm</h1>
+      <div class="top-right">
+        <p id="st" class="status-line">HID: connecting…</p>
+        <span id="fps-display" class="fps-display hidden">FPS: --</span>
+        <details class="gear-dd">
+          <summary class="gear-sum" title="Settings" aria-label="Settings">
+            <svg
+              class="gear-ico"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <path
+                d="M9.671 4.136a2.34 2.34 0 0 1 4.659 0 2.34 2.34 0 0 0 3.319 1.915 2.34 2.34 0 0 1 2.33 4.033 2.34 2.34 0 0 0 0 3.831 2.34 2.34 0 0 1-2.33 4.033 2.34 2.34 0 0 0-3.319 1.915 2.34 2.34 0 0 1-4.659 0 2.34 2.34 0 0 0-3.32-1.915 2.34 2.34 0 0 1-2.33-4.033 2.34 2.34 0 0 0 0-3.831A2.34 2.34 0 0 1 6.35 6.051a2.34 2.34 0 0 0 3.319-1.915"
+              />
+              <circle cx="12" cy="12" r="3" />
+            </svg>
+          </summary>
+          <div class="gear-panel">
+            <h2 class="gear-panel-title">Settings</h2>
+            <label class="gear-field" title="Keyboard Helpers">
+              <span class="gear-label">Keyboard Helpers</span>
+            </label>
+            <div class="gear-row">
+              <button type="button" id="btn-send-esc" disabled>Send Esc</button>
+              <button type="button" id="btn-paste-clip" disabled>
+                Paste clipboard
+              </button>
+            </div>
+            <label
+              class="gear-field"
+              title="JPEG quality 1–100 (stored on the device)."
+            >
+              <span class="gear-label">Encoding Quality</span>
+              <span class="gear-ctrl">
+                <input
+                  type="number"
+                  id="jpeg-q"
+                  min="1"
+                  max="100"
+                  step="1"
+                  value="70"
+                />
+                <button type="button" id="btn-jpeg-q">Apply</button>
+              </span>
+            </label>
+             <label
+               class="gear-field"
+               title="Scales pointer-lock movement sent to the host (stored in this browser)."
+             >
+               <span class="gear-label">Pointer sensitivity</span>
+               <span class="gear-ctrl gear-ctrl-range">
+                 <input
+                   type="range"
+                   id="ptr-sens"
+                   min="25"
+                   max="300"
+                   step="5"
+                   value="100"
+                 />
+                 <span id="ptr-sens-val">100%</span>
+               </span>
+             </label>
+             <label class="gear-field" title="Display FPS counter in the status bar.">
+               <span class="gear-label">Show FPS</span>
+               <span class="gear-ctrl">
+                 <input type="checkbox" id="show-fps" />
+               </span>
+             </label>
+           </div>
+        </details>
+      </div>
+    </header>
+    <div class="kvm-wrap">
+      <div id="kvm-banner" class="kvm-banner" role="status">
+        Click the video below to capture the mouse and keyboard for the remote
+        host (pointer lock).
+      </div>
+      <canvas
+        id="kvm"
+        width="1920"
+        height="1080"
+        alt="KVM"
+      ></canvas>
+    </div>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>

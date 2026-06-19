@@ -1,0 +1,226 @@
+body {
+  font-family: system-ui, sans-serif;
+  margin: 0;
+  background-color: #1a1a1f;
+  color: #e8f0ff;
+}
+.top-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.65rem 1rem 0.75rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+}
+.top-title {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #c8d4ee;
+}
+.top-right {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  min-width: 0;
+}
+.gear-dd {
+  position: relative;
+}
+.gear-sum {
+  list-style: none;
+  cursor: pointer;
+  margin: 0;
+  padding: 0.35rem;
+  border-radius: 6px;
+  color: #c8d4ee;
+  display: flex;
+  align-items: center;
+  line-height: 0;
+}
+.gear-sum::-webkit-details-marker {
+  display: none;
+}
+.gear-sum::marker {
+  content: "";
+}
+.gear-sum:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+.gear-ico {
+  width: 1.35rem;
+  height: 1.35rem;
+  display: block;
+}
+.gear-panel {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 0.35rem);
+  min-width: 17rem;
+  max-width: min(22rem, calc(100vw - 2rem));
+  padding: 1.5rem 0.75rem;
+  box-sizing: border-box;
+  background: #252530;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 8px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.45);
+  z-index: 20;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+.gear-panel-title {
+  margin: -0.25rem 0 0;
+  padding-bottom: 0.35rem;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  color: #b8c4dc;
+}
+.gear-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+.gear-panel button {
+  font: inherit;
+  font-size: 0.875rem;
+  font-weight: 500;
+  padding: 0.45rem 0.85rem;
+  cursor: pointer;
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background-color: #353542;
+  color: #e8edf8;
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.06) inset,
+    0 1px 2px rgba(0, 0, 0, 0.25);
+  transition:
+    background-color 0.12s ease,
+    border-color 0.12s ease,
+    box-shadow 0.12s ease;
+}
+.gear-panel button:hover:not(:disabled) {
+  background-color: #3f3f4e;
+  border-color: rgba(255, 255, 255, 0.22);
+}
+.gear-panel button:active:not(:disabled) {
+  background-color: #2d2d38;
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.2) inset;
+}
+.gear-panel button:focus-visible {
+  outline: 2px solid rgba(110, 165, 255, 0.55);
+  outline-offset: 2px;
+}
+.gear-panel button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+  box-shadow: none;
+}
+.gear-ctrl button {
+  background-color: rgba(32, 58, 108, 0.85);
+  border-color: rgba(130, 175, 255, 0.35);
+}
+.gear-ctrl button:hover:not(:disabled) {
+  background-color: rgba(40, 72, 132, 0.92);
+  border-color: rgba(150, 190, 255, 0.45);
+}
+.gear-ctrl button:active:not(:disabled) {
+  background-color: rgba(26, 48, 92, 0.95);
+}
+.gear-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  font: inherit;
+  cursor: default;
+}
+.gear-label {
+  font-size: 0.85rem;
+  color: #b8c4dc;
+}
+.gear-ctrl {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+.gear-ctrl-range input[type="range"] {
+  flex: 1;
+  min-width: 8rem;
+}
+.gear-panel input[type="number"] {
+  width: 3.5rem;
+  font: inherit;
+  padding: 0.25rem 0.35rem;
+}
+#ptr-sens-val {
+  min-width: 3.25rem;
+  font-variant-numeric: tabular-nums;
+}
+  .status-line {
+    margin: 0;
+    font-size: 0.9rem;
+    color: #c8d4ee;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 14rem;
+  }
+  .fps-display {
+    font-size: 0.9rem;
+    color: #8bd88b;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+  .fps-display.hidden {
+    display: none;
+  }
+  @media (max-width: 520px) {
+  .status-line {
+    max-width: 9rem;
+  }
+}
+.kvm-wrap {
+  position: relative;
+  display: block;
+  width: 100%;
+  max-width: 100%;
+}
+.kvm-banner {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 2;
+  box-sizing: border-box;
+  padding: 0.65rem 1rem;
+  background: rgba(18, 42, 82, 0.94);
+  color: #e8f0ff;
+  font-size: 0.95rem;
+  line-height: 1.35;
+  text-align: center;
+  pointer-events: none;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+}
+.kvm-banner.hidden {
+  display: none;
+}
+#kvm {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  aspect-ratio: 16/9;
+  cursor: crosshair;
+  background: #111;
+  touch-action: none;
+}
+#kvm.pointer-locked {
+  cursor: none;
+}
+.hint {
+  color: #555;
+  font-size: 0.85rem;
+  max-width: 50rem;
+}

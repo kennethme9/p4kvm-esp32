@@ -1,0 +1,24 @@
+# Full-frame capture @ 1080p needs PSRAM (ping-pong buffers + JPEG + HTTP copy).
+# esp_http_server: max_open_sockets + 3 internal fds must be <= CONFIG_LWIP_MAX_SOCKETS.
+# Headroom for concurrent /stream + /jpeg-quality + /ws (and dev proxy opening several TCPs).
+CONFIG_LWIP_MAX_SOCKETS=24
+
+CONFIG_P4KVM_JPEG_QUALITY=70
+
+# WebSocket /ws for browser → USB HID control plane
+CONFIG_HTTPD_WS_SUPPORT=y
+# Default 1024 is too small for Chromium + Vite proxy (sec-ch-ua-*, cookies) → 431 on device.
+CONFIG_HTTPD_MAX_REQ_HDR_LEN=8192
+
+# Composite HID keyboard + mouse (TinyUSB)
+CONFIG_TINYUSB_HID_COUNT=1
+
+# ESP32-P4 AP-HEX PSRAM size (e.g. 32 MB) is detected at boot - no separate "32MB" Kconfig.
+CONFIG_SPIRAM=y
+CONFIG_SPIRAM_MODE_HEX=y
+CONFIG_SPIRAM_SPEED_200M=y
+
+# MJPEG pushes large JPEG segments; lwIP defaults (~5.8 KiB) cause backpressure/resets on Ethernet.
+CONFIG_LWIP_TCP_SND_BUF_DEFAULT=65535
+CONFIG_LWIP_TCP_WND_DEFAULT=65535
+CONFIG_LWIP_TCPIP_TASK_STACK_SIZE=6144

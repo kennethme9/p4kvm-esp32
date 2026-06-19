@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="Cache-Control" content="no-cache" />
+    <link rel="icon" href="./favicon.ico" sizes="any" />
+    <title>p4kvm</title>
+    <script type="module" crossorigin>(function(){const I=document.createElement("link").relList;if(I&&I.supports&&I.supports("modulepreload"))return;for(const a of document.querySelectorAll('link[rel="modulepreload"]'))w(a);new MutationObserver(a=>{for(const l of a)if(l.type==="childList")for(const b of l.addedNodes)b.tagName==="LINK"&&b.rel==="modulepreload"&&w(b)}).observe(document,{childList:!0,subtree:!0});function u(a){const l={};return a.integrity&&(l.integrity=a.integrity),a.referrerPolicy&&(l.referrerPolicy=a.referrerPolicy),a.crossOrigin==="use-credentials"?l.credentials="include":a.crossOrigin==="anonymous"?l.credentials="omit":l.credentials="same-origin",l}function w(a){if(a.ep)return;a.ep=!0;const l=u(a);fetch(a.href,l)}})();(function(){const u=document.getElementById("kvm"),w=document.getElementById("kvm-banner"),a=document.getElementById("st"),l=document.getElementById("fps-display"),b=document.getElementById("btn-send-esc"),U=document.getElementById("btn-paste-clip"),L=document.getElementById("ptr-sens"),N=document.getElementById("ptr-sens-val"),k=document.getElementById("jpeg-q"),it=document.getElementById("btn-jpeg-q"),H=document.getElementById("show-fps"),j="p4kvm_pointer_sensitivity_pct",W="p4kvm_show_fps";function rt(){let t=100;try{const e=localStorage.getItem(j);if(e!==null){const n=parseInt(e,10);isNaN(n)||(t=Math.max(25,Math.min(300,n)))}}catch{}return t}function ct(t){try{localStorage.setItem(j,String(t))}catch{}}function Y(){try{return localStorage.getItem(W)==="true"}catch{return!1}}function st(t){try{localStorage.setItem(W,String(t))}catch{}}(function(){const e=rt();L.value=String(e),N.textContent=e+"%",L.addEventListener("input",function(){N.textContent=parseInt(L.value,10)+"%"}),L.addEventListener("change",function(){ct(parseInt(L.value,10))})})();let R=Y(),x=0,_=performance.now(),V=0;(function(){const e=Y();H.checked=e,l.classList.toggle("hidden",!e),R=e,H.addEventListener("change",function(){const n=H.checked;st(n),l.classList.toggle("hidden",!n),R=n,n?(x=0,_=performance.now()):l.textContent="FPS: --"})})();const at=u.getContext("2d");let E=null;function Q(t,e){const n=e.length;for(let o=0;o<=t.length-n;o++){let i=0;for(;i<n&&t[o+i]===e[i];)i++;if(i===n)return o}return-1}const C=new TextEncoder().encode(`--frame\r
+`),X=new TextEncoder().encode(`\r
+\r
+`);async function ut(){for(E&&E.abort(),E=new AbortController;;){try{const t=(await fetch("/stream",{signal:E.signal})).body.getReader();let e=new Uint8Array(0);for(;;){const{done:n,value:o}=await t.read();if(n)break;if(o&&o.length){const i=new Uint8Array(e.length+o.length);i.set(e),i.set(o,e.length),e=i}for(;e.length>0;){const i=Q(e,C);if(i<0)break;const s=e.slice(i+C.length),c=Q(s,X);if(c<0)break;const m=new TextDecoder().decode(s.slice(0,c)).match(/Content-Length:\s*(\d+)/i);if(!m){e=e.slice(i+C.length);break}const p=parseInt(m[1],10),h=i+C.length+c+X.length,nt=h+p+2;if(e.length<nt)break;const At=e.slice(h,h+p);try{const K=await createImageBitmap(new Blob([At],{type:"image/jpeg"}));at.drawImage(K,0,0,1920,1080),K.close(),x++,performance.now()-_>=1e3&&(R&&(V=x,l.textContent="FPS: "+V),x=0,_=performance.now())}catch{}e=e.slice(nt)}}}catch{if(E&&E.signal.aborted)return}await q(1e3)}}ut();function J(t){const e=parseInt(String(t).trim(),10);return isNaN(e)||e<1||e>100?null:e}async function lt(){try{const t=await fetch("/jpeg-quality",{cache:"no-store"});if(!t.ok)return;const e=J(await t.text());e!==null&&(k.value=String(e))}catch{}}async function z(){let t=parseInt(k.value,10);if(!isNaN(t)){t=Math.max(1,Math.min(100,t)),k.value=String(t);try{const e=await fetch("/jpeg-quality?q="+encodeURIComponent(t),{cache:"no-store"});if(e.ok){const n=J(await e.text());n!==null&&(k.value=String(n))}}catch{}}}it.addEventListener("click",z),k.addEventListener("keydown",function(t){t.key==="Enter"&&(t.preventDefault(),z())}),lt();function ft(){return parseInt(L.value,10)/100}const dt=location.protocol==="https:"?"wss":"ws";let r=null,M=null;const $=(function(){const t={};for(let e=0;e<26;e++)t["Key"+String.fromCharCode(65+e)]=4+e;for(const[e,n]of[["Digit1",30],["Digit2",31],["Digit3",32],["Digit4",33],["Digit5",34],["Digit6",35],["Digit7",36],["Digit8",37],["Digit9",38],["Digit0",39]])t[e]=n;for(const[e,n]of[["Enter",40],["Escape",41],["Backspace",42],["Tab",43],["Space",44],["Minus",45],["Equal",46],["BracketLeft",47],["BracketRight",48],["Backslash",49],["Semicolon",51],["Quote",52],["Backquote",53],["Comma",54],["Period",55],["Slash",56],["CapsLock",57],["F1",58],["F2",59],["F3",60],["F4",61],["F5",62],["F6",63],["F7",64],["F8",65],["F9",66],["F10",67],["F11",68],["F12",69],["Insert",73],["Home",74],["PageUp",75],["Delete",76],["End",77],["PageDown",78],["ArrowRight",79],["ArrowLeft",80],["ArrowDown",81],["ArrowUp",82]])t[e]=n;return t})(),S=new Map;function mt(t){let e=0;return t.ctrlKey&&(e|=1),t.shiftKey&&(e|=2),t.altKey&&(e|=4),t.metaKey&&(e|=8),e}function A(t){if(!r||r.readyState!==1)return;const e=mt(t),n=[];for(const s of S.keys()){if(n.length>=6)break;n.push(s)}for(;n.length<6;)n.push(0);const o=new ArrayBuffer(8),i=new DataView(o);i.setUint8(0,2),i.setUint8(1,e);for(let s=0;s<6;s++)i.setUint8(2+s,n[s]);r.send(o)}const G=new Set(["ControlLeft","ControlRight","ShiftLeft","ShiftRight","AltLeft","AltRight","MetaLeft","MetaRight"]),pt=2;function B(t,e){if(!r||r.readyState!==1)return;const n=e.slice(0,6);for(;n.length<6;)n.push(0);const o=new ArrayBuffer(8),i=new DataView(o);i.setUint8(0,2),i.setUint8(1,t&255);for(let s=0;s<6;s++)i.setUint8(2+s,n[s]);r.send(o)}function ht(t,e){B(t,[e]),setTimeout(function(){B(0,[])},28)}const gt=(function(){const t={},e=pt;function n(c,m,p){t[c]={mod:m,hid:p}}for(let c=0;c<26;c++)n(String.fromCharCode(97+c),0,4+c),n(String.fromCharCode(65+c),e,4+c);const o=[30,31,32,33,34,35,36,37,38,39],i="1234567890";for(let c=0;c<10;c++)n(i[c],0,o[c]);const s=")!@#$%^&*(";for(let c=0;c<10;c++)n(s[c],e,o[c]);return n(" ",0,44),n(`
+`,0,40),n("\r",0,40),n("	",0,43),n("-",0,45),n("_",e,45),n("=",0,46),n("+",e,46),n("[",0,47),n("{",e,47),n("]",0,48),n("}",e,48),n("\\",0,49),n("|",e,49),n(";",0,51),n(":",e,51),n("'",0,52),n('"',e,52),n("`",0,53),n("~",e,53),n(",",0,54),n("<",e,54),n(".",0,55),n(">",e,55),n("/",0,56),n("?",e,56),t})();function q(t){return new Promise(function(e){setTimeout(e,t)})}async function yt(t){for(let e=0;e<t.length;e++){const n=t.charAt(e);if(n==="\r"&&t.charAt(e+1)===`
+`)continue;const o=gt[n];o&&(B(o.mod,[o.hid]),await q(28),B(0,[]),await q(18))}}function F(){const t=r&&r.readyState===1;b.disabled=!t,U.disabled=!t}b.addEventListener("click",function(){!r||r.readyState!==1||ht(0,41)}),U.addEventListener("click",function(){if(!(!r||r.readyState!==1)){if(!navigator.clipboard||!navigator.clipboard.readText){a.textContent="Clipboard API unavailable (use HTTPS or localhost)";return}U.disabled=!0,navigator.clipboard.readText().then(function(t){return yt(t)}).then(function(){F(),O()}).catch(function(){a.textContent="Clipboard read denied or failed (grant permission / use HTTPS)",F()})}});function wt(t){if(!D())return;if(G.has(t.code)){A(t);return}const e=$[t.code];e!==void 0&&(t.preventDefault(),S.set(e,!0),A(t))}function bt(t){if(!D())return;if(G.has(t.code)){A(t);return}const e=$[t.code];e!==void 0&&(t.preventDefault(),S.delete(e),A(t))}window.addEventListener("keydown",wt,!0),window.addEventListener("keyup",bt,!0),window.addEventListener("blur",function(){if(D()&&S.size!==0&&(S.clear(),r&&r.readyState===1)){const t=new ArrayBuffer(8),e=new DataView(t);e.setUint8(0,2),e.setUint8(1,0);for(let n=0;n<6;n++)e.setUint8(2+n,0);r.send(t)}});function Lt(t){const e=u.getBoundingClientRect();return t.clientX>=e.left&&t.clientX<=e.right&&t.clientY>=e.top&&t.clientY<=e.bottom}let g=0,y=0;function D(){return document.pointerLockElement===u}function Et(){const t=u.getBoundingClientRect();return t.width<=0||t.height<=0?{sx:1,sy:1}:{sx:1919/t.width,sy:1079/t.height}}function St(t){const e=t.movementX||0,n=t.movementY||0,{sx:o,sy:i}=Et(),s=ft(),c=Math.round(e*o*s),m=Math.round(n*i*s);let p=g+c,h=y+m;return p<0&&(p=0),h<0&&(h=0),p>=1920&&(p=1919),h>=1080&&(h=1079),g=p,y=h,{rdx:c,rdy:m}}let Z=!1;function O(){const t=D();if(Z&&!t&&(S.clear(),r&&r.readyState===1)){const e=new ArrayBuffer(8),n=new DataView(e);n.setUint8(0,2),n.setUint8(1,0);for(let o=0;o<6;o++)n.setUint8(2+o,0);r.send(e)}Z=t,t?(w.classList.add("hidden"),u.classList.add("pointer-locked"),r&&r.readyState===1&&(a.textContent="Locked",T(0,g,y,0,!0))):(w.classList.remove("hidden"),u.classList.remove("pointer-locked"),r&&r.readyState===1&&(a.textContent="Ready"))}document.addEventListener("pointerlockchange",O),document.addEventListener("pointerlockerror",function(){w.classList.remove("hidden"),a.textContent="HID: pointer lock failed (try HTTPS, or another browser)"});let f=null,d=0;function tt(t){!f||f.mode===t||(d&&(cancelAnimationFrame(d),d=0),v())}function v(){if(d=0,!f||!r||r.readyState!==1)return;const t=f;f=null;const e=new ArrayBuffer(8),n=new DataView(e);if(n.setUint8(0,1),n.setUint8(1,t.buttons),t.mode==="rel"){const o=function(i){return Math.max(-32768,Math.min(32767,i))};n.setInt16(2,o(t.dx),!0),n.setInt16(4,o(t.dy),!0),n.setUint8(7,1)}else n.setUint16(2,t.x,!0),n.setUint16(4,t.y,!0),n.setUint8(7,0);n.setInt8(6,t.wheel),r.send(e)}function T(t,e,n,o,i){tt("abs");const s=f,c=s!==null&&s.mode==="abs"&&s.buttons!==t;if(f={mode:"abs",buttons:t,x:e,y:n,wheel:o},i||o!==0||c){d&&(cancelAnimationFrame(d),d=0),v();return}d||(d=requestAnimationFrame(v))}function kt(t,e,n,o,i){tt("rel");const s=f,c=s!==null&&s.mode==="rel"&&s.buttons!==t;if(!f||f.mode!=="rel")f={mode:"rel",buttons:t,dx:e,dy:n,wheel:o};else{f.buttons=t,f.dx+=e,f.dy+=n;let m=f.wheel+o;m>127?m=127:m<-127&&(m=-127),f.wheel=m}if(i||o!==0||c){d&&(cancelAnimationFrame(d),d=0),v();return}d||(d=requestAnimationFrame(v))}function Dt(t){const e=u.getBoundingClientRect();let n=t.clientX-e.left,o=t.clientY-e.top;return e.width<=0||e.height<=0?{x:0,y:0}:(n=Math.round(n/e.width*1919),o=Math.round(o/e.height*1079),n<0&&(n=0),o<0&&(o=0),n>=1920&&(n=1919),o>=1080&&(o=1079),{x:n,y:o})}function P(t){let e=0;return t.buttons&1&&(e|=1),t.buttons&2&&(e|=2),t.buttons&4&&(e|=4),(t.type==="pointerdown"||t.type==="mousedown")&&e===0&&typeof t.button=="number"&&(t.button===0?e|=1:t.button===1?e|=4:t.button===2&&(e|=2)),e}function vt(t){if(D()||t.pointerType&&t.pointerType!=="mouse"&&t.pointerType!=="pen"||!Lt(t))return;const{x:e,y:n}=Dt(t);if(g=e,y=n,t.button===0&&document.pointerLockElement!==u&&typeof u.requestPointerLock=="function"){t.preventDefault();const o=u.requestPointerLock();o&&typeof o.catch=="function"&&o.catch(function(){})}}u.addEventListener("pointerdown",vt),u.addEventListener("contextmenu",function(t){t.preventDefault()});function It(t){if(document.pointerLockElement!==u)return;const{rdx:e,rdy:n}=St(t);kt(P(t),e,n,0,!1)}function xt(t){document.pointerLockElement===u&&T(P(t),g,y,0,!0)}function Ct(t){document.pointerLockElement===u&&T(P(t),g,y,0,!0)}function Mt(t){if(document.pointerLockElement!==u)return;t.preventDefault();const e=Math.max(-127,Math.min(127,Math.round(-t.deltaY/16)));T(P(t),g,y,e,!0)}document.addEventListener("mousemove",It),document.addEventListener("mousedown",xt),document.addEventListener("mouseup",Ct),document.addEventListener("wheel",Mt,{passive:!1});function et(){M&&(clearTimeout(M),M=null),r=new WebSocket(dt+"://"+location.host+"/ws"),r.binaryType="arraybuffer",r.onopen=function(){O(),F()},r.onclose=function(){document.pointerLockElement===u&&document.exitPointerLock(),a.textContent="Disconnected: retrying…",F(),M=setTimeout(et,2e3)},r.onerror=function(){r.close()}}setTimeout(function(){et()},400)})();</script>
+    <style rel="stylesheet" crossorigin>body{color:#e8f0ff;background-color:#1a1a1f;margin:0;font-family:system-ui,sans-serif}.top-bar{border-bottom:1px solid #ffffff1f;justify-content:space-between;align-items:center;gap:1rem;padding:.65rem 1rem .75rem;display:flex}.top-title{color:#c8d4ee;margin:0;font-size:1.25rem;font-weight:600}.top-right{align-items:center;gap:.65rem;min-width:0;display:flex}.gear-dd{position:relative}.gear-sum{cursor:pointer;color:#c8d4ee;border-radius:6px;align-items:center;margin:0;padding:.35rem;line-height:0;list-style:none;display:flex}.gear-sum::-webkit-details-marker{display:none}.gear-sum::marker{content:""}.gear-sum:hover{background:#ffffff14}.gear-ico{width:1.35rem;height:1.35rem;display:block}.gear-panel{box-sizing:border-box;z-index:20;background:#252530;border:1px solid #ffffff26;border-radius:8px;flex-direction:column;gap:.75rem;min-width:17rem;max-width:min(22rem,100vw - 2rem);padding:1.5rem .75rem;display:flex;position:absolute;top:calc(100% + .35rem);right:0;box-shadow:0 6px 20px #00000073}.gear-panel-title{letter-spacing:.03em;color:#b8c4dc;margin:-.25rem 0 0;padding-bottom:.35rem;font-size:.9375rem;font-weight:600}.gear-row{flex-wrap:wrap;gap:.5rem;display:flex}.gear-panel button{font:inherit;cursor:pointer;color:#e8edf8;background-color:#353542;border:1px solid #ffffff24;border-radius:6px;padding:.45rem .85rem;font-size:.875rem;font-weight:500;transition:background-color .12s,border-color .12s,box-shadow .12s;box-shadow:inset 0 1px #ffffff0f,0 1px 2px #00000040}.gear-panel button:hover:not(:disabled){background-color:#3f3f4e;border-color:#ffffff38}.gear-panel button:active:not(:disabled){background-color:#2d2d38;box-shadow:inset 0 1px #0003}.gear-panel button:focus-visible{outline-offset:2px;outline:2px solid #6ea5ff8c}.gear-panel button:disabled{cursor:not-allowed;opacity:.5;box-shadow:none}.gear-ctrl button{background-color:#203a6cd9;border-color:#82afff59}.gear-ctrl button:hover:not(:disabled){background-color:#284884eb;border-color:#96beff73}.gear-ctrl button:active:not(:disabled){background-color:#1a305cf2}.gear-field{font:inherit;cursor:default;flex-direction:column;gap:.35rem;display:flex}.gear-label{color:#b8c4dc;font-size:.85rem}.gear-ctrl{flex-wrap:wrap;align-items:center;gap:.5rem;display:flex}.gear-ctrl-range input[type=range]{flex:1;min-width:8rem}.gear-panel input[type=number]{width:3.5rem;font:inherit;padding:.25rem .35rem}#ptr-sens-val{font-variant-numeric:tabular-nums;min-width:3.25rem}.status-line{color:#c8d4ee;white-space:nowrap;text-overflow:ellipsis;max-width:14rem;margin:0;font-size:.9rem;overflow:hidden}.fps-display{color:#8bd88b;font-variant-numeric:tabular-nums;white-space:nowrap;font-size:.9rem}.fps-display.hidden{display:none}@media (width<=520px){.status-line{max-width:9rem}}.kvm-wrap{width:100%;max-width:100%;display:block;position:relative}.kvm-banner{z-index:2;box-sizing:border-box;color:#e8f0ff;text-align:center;pointer-events:none;background:#122a52f0;border-bottom:1px solid #ffffff1f;padding:.65rem 1rem;font-size:.95rem;line-height:1.35;position:absolute;top:0;left:0;right:0}.kvm-banner.hidden{display:none}#kvm{aspect-ratio:16/9;cursor:crosshair;touch-action:none;background:#111;width:100%;max-width:100%;height:auto;display:block}#kvm.pointer-locked{cursor:none}.hint{color:#555;max-width:50rem;font-size:.85rem}
+/*$vite$:1*/</style>
+  </head>
+  <body>
+    <header class="top-bar">
+      <h1 class="top-title">p4kvm</h1>
+      <div class="top-right">
+        <p id="st" class="status-line">HID: connecting…</p>
+        <span id="fps-display" class="fps-display hidden">FPS: --</span>
+        <details class="gear-dd">
+          <summary class="gear-sum" title="Settings" aria-label="Settings">
+            <svg
+              class="gear-ico"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <path
+                d="M9.671 4.136a2.34 2.34 0 0 1 4.659 0 2.34 2.34 0 0 0 3.319 1.915 2.34 2.34 0 0 1 2.33 4.033 2.34 2.34 0 0 0 0 3.831 2.34 2.34 0 0 1-2.33 4.033 2.34 2.34 0 0 0-3.319 1.915 2.34 2.34 0 0 1-4.659 0 2.34 2.34 0 0 0-3.32-1.915 2.34 2.34 0 0 1-2.33-4.033 2.34 2.34 0 0 0 0-3.831A2.34 2.34 0 0 1 6.35 6.051a2.34 2.34 0 0 0 3.319-1.915"
+              />
+              <circle cx="12" cy="12" r="3" />
+            </svg>
+          </summary>
+          <div class="gear-panel">
+            <h2 class="gear-panel-title">Settings</h2>
+            <label class="gear-field" title="Keyboard Helpers">
+              <span class="gear-label">Keyboard Helpers</span>
+            </label>
+            <div class="gear-row">
+              <button type="button" id="btn-send-esc" disabled>Send Esc</button>
+              <button type="button" id="btn-paste-clip" disabled>
+                Paste clipboard
+              </button>
+            </div>
+            <label
+              class="gear-field"
+              title="JPEG quality 1–100 (stored on the device)."
+            >
+              <span class="gear-label">Encoding Quality</span>
+              <span class="gear-ctrl">
+                <input
+                  type="number"
+                  id="jpeg-q"
+                  min="1"
+                  max="100"
+                  step="1"
+                  value="70"
+                />
+                <button type="button" id="btn-jpeg-q">Apply</button>
+              </span>
+            </label>
+             <label
+               class="gear-field"
+               title="Scales pointer-lock movement sent to the host (stored in this browser)."
+             >
+               <span class="gear-label">Pointer sensitivity</span>
+               <span class="gear-ctrl gear-ctrl-range">
+                 <input
+                   type="range"
+                   id="ptr-sens"
+                   min="25"
+                   max="300"
+                   step="5"
+                   value="100"
+                 />
+                 <span id="ptr-sens-val">100%</span>
+               </span>
+             </label>
+             <label class="gear-field" title="Display FPS counter in the status bar.">
+               <span class="gear-label">Show FPS</span>
+               <span class="gear-ctrl">
+                 <input type="checkbox" id="show-fps" />
+               </span>
+             </label>
+           </div>
+        </details>
+      </div>
+    </header>
+    <div class="kvm-wrap">
+      <div id="kvm-banner" class="kvm-banner" role="status">
+        Click the video below to capture the mouse and keyboard for the remote
+        host (pointer lock).
+      </div>
+      <canvas
+        id="kvm"
+        width="1920"
+        height="1080"
+        alt="KVM"
+      ></canvas>
+    </div>
+  </body>
+</html>

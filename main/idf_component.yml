@@ -1,0 +1,6 @@
+## IDF Component Manager manifest
+dependencies:
+  espressif/esp_tinyusb:
+    version: "^2.0.0"
+  espressif/mdns:
+    version: "^1.8.0"
