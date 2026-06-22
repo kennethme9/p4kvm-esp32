@@ -8,24 +8,57 @@ This is NOT production software! THis is a POC, use this at your own risk! There
 
 ## Parts Needed
 
-- Waveshare p4 module with rpi CSI interface + ethernet
-- Toshiba TC358743 HDMI to CSI adapter -
+- Any esp32-p4 module with rpi camera compatible CSI interface + ethernet
+- Toshiba TC358743 HDMI to CSI adapter
 
-## Building
+## 3d Printed Enclosure
 
-Use esp-idf, 6.0.1, run menuconfig, idf.py build flash monitor. Open p4kvm.local in your browser.
+[Makerworld](https://makerworld.com/en/models/2961981-esp32-p4-ip-kvm-enclosure)
 
-## Troubleshooting
+## Building/Flashing Firmware
 
+1. Use esp-idf, 6.0.1
+2. run menuconfig (select chip revision < 3, choose options in p4kvm>)
+3. idf.py build flash monitor (monitor is optional)
+4. Open p4kvm.local in your browser
+
+## Building Web App
+
+1. cd web
+2. npm install
+3. npm run build
+4. follow build/flash steps above
+
+## FAQ
+
+### How do I access this remotely?
+
+You will need some sort of vpn, like tailscale, wireguard, etc., do not expose this to the public internet.
+
+### How do I change the resolution/framerate?
+
+This is not supported yet, but you can change the EDID in tc358743_edid_bin defined in tc358743_edid_1080p30.h if you want to experiment.
+
+### Can I change the escape key from leaving captured input?
+
+Afaik, it's not possible to change the escape key in a browser.
+
+### Why are you missing X feature?
+
+This is a POC, not a production project. Please fork it and customize it!
+
+## Troubleshooting & known issues
+
+- if the source goes to sleep, the p4kvm doesn't always recover, WIP
+- some systems don't like the EDID, try changing the EDID
 - try plugging in your target system before booting the p4 kvm
 - try a different HDMI cable or USB cable
 - look at the diagnsotics for the tc358743: SYS_STATUS, i.e. (TMDS=1 HDMI=1 SYNC=1 DDC5V=1), they should all be 1
 
 ## Video
 
-Chip revisions on the ESP32 P4 are very critical, this project assumes you have a Rev 1.3 chip. Rev 3 chips will be able to use H264 encoding, hopefully.
-
-**CSI path is fixed** to **RGB888** for now, other options don't work well with the jpeg encoder.
+Chip revisions on the ESP32 P4 are very critical, this project assumes you have a Rev 1.3 chip. Rev 3+ chips will be able to use H264 encoding, hopefully, but it's not included in this firmware.
+**CSI path is fixed** to **RGB888** for now, YUV doesn't work well with the jpeg encoder
 
 ## Menuconfig (`P4KVM`)
 

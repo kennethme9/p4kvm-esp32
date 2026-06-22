@@ -1,6 +1,8 @@
 /*
  * 1080p30 EDID: two blocks, 256 bytes. 
  * EDID provided by waveshare CSI->HDMI adapter
+ * 
+ * source: Waveshare hdmi/csi adapter
  */
 #pragma once
 #include <stdint.h>

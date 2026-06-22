@@ -381,7 +381,6 @@ httpd_handle_t http_server_start(void)
     /* Browsers send >1 KiB of headers; Vite dev proxy forwards them. Default 1024 → 431. */
     cfg.max_req_hdr_len = 8192;
     cfg.server_port = 80;
-    /* Chunked MJPEG + TLS/lwIP: extra headroom; default 4096 is tight. */
     cfg.stack_size = 20 * 1024;
     /* Prefer draining TCP slightly above capture so multipart frames reach the browser. */
     cfg.task_priority = tskIDLE_PRIORITY + 6;
@@ -389,7 +388,7 @@ httpd_handle_t http_server_start(void)
     cfg.keep_alive_enable = true;
     cfg.uri_match_fn = httpd_uri_match_wildcard;
     cfg.close_fn = http_sess_close_cb;
-    /* Single-user KVM: do not evict long-lived /stream when /ws or /jpeg-quality connects (avoids RST/hang-up storms). */
+    /* Single-user KVM: do not evict long-lived /stream when /ws or /jpeg-quality connects */
     cfg.lru_purge_enable = false;
     cfg.max_open_sockets = 12;
     cfg.max_uri_handlers = 12;
