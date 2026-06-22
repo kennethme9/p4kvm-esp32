@@ -6,12 +6,14 @@ This project uses an ESP32 P4 (Rev < 3) and a Toshiba TC358743 HDMI to CSI adapt
 
 This is NOT production software! THis is a POC, use this at your own risk! There are many bugs, there is NOT security, none. There is no wifi in this firmware, there is only ethernet.
 
-## Parts Needed
+## Parts Needed (affiliate links)
 
-- Any esp32-p4 module with rpi camera compatible CSI interface + ethernet
-- Toshiba TC358743 HDMI to CSI adapter
+- Any [esp32-p4 module with rpi camera compatible CSI interface + ethernet](https://amzn.to/4v9c3Nf)
+- [Toshiba TC358743 HDMI to CSI adapter](https://amzn.to/44mJyAp)
 
 ## 3d Printed Enclosure
+
+This ony works with the specific parts above:
 
 [Makerworld](https://makerworld.com/en/models/2961981-esp32-p4-ip-kvm-enclosure)
 
