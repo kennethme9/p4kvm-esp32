@@ -67,3 +67,5 @@ Chip revisions on the ESP32 P4 are very critical, this project assumes you have 
 - **`P4KVM_TC358743_RST_GPIO`**: reset line (active low); use `-1` if unwired (default GPIO 23).
 - **`P4KVM_JPEG_QUALITY`**: 1-100. (This is also available through the UI)
 - **Ethernet**: `P4KVM_ETH_ENABLE` and RMII/MDIO/PHY GPIO options when `SOC_EMAC_SUPPORTED` applies.
+
+https://www.youtube.com/watch?v=f21f6RnW5Yc
